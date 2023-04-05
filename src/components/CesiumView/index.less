@@ -1,0 +1,32 @@
+.container {
+  width: 100%;
+}
+.cesiumContainer {
+  height: 99.5vh;
+  :global {
+    .cesium-viewer-fullscreenContainer {
+      right: 123px;
+
+      top: 8px;
+    }
+
+    .cesium-viewer-vrContainer {
+      top: 8px;
+      right: 160px !important;
+    }
+  }
+}
+
+.slider {
+  position: absolute;
+  left: 50%;
+  top: 0px;
+  background-color: #d3d3d3;
+  width: 5px;
+  height: 100%;
+  z-index: 9999;
+  display: none;
+  &:hover {
+    cursor: ew-resize;
+  }
+}

@@ -1,0 +1,38 @@
+.panel {
+  align-items: stretch;
+  transition: max-height var(--calcite-app-animation-time)
+    var(--calcite-app-easing-function);
+  width: 100%;
+  height: 100vh;
+  padding: 0px;
+
+  margin: 0px;
+  display: flex;
+  flex-flow: column;
+  overflow: auto;
+  .header {
+    font-weight: bold;
+    align-items: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    min-height: var(--calcite-app-header-min-height);
+    position: relative;
+    z-index: 2;
+    border-bottom: 1px solid var(--calcite-app-border);
+    width: 100%;
+    .header-content {
+      overflow: hidden;
+      padding: var(--calcite-app-cap-spacing) var(--calcite-app-side-spacing);
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      width: 100%;
+      background-color: var(--calcite-app-background-content);
+    }
+  }
+}
+.content-container {
+  padding: 10px;
+}

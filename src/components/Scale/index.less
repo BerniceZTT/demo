@@ -1,0 +1,31 @@
+.scale-container {
+  position: absolute;
+  z-index: 1001;
+  left: 0;
+  bottom: 0;
+  width: 120px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.scale-label {
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+}
+.scale-bar {
+  position: relative;
+  padding-top: 10px;
+}
+.scale-bar::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 10px;
+  border: 1px solid #fff;
+  border-top: none;
+  left: 0;
+  bottom: 0;
+}

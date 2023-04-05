@@ -1,0 +1,33 @@
+.title {
+  background: rgb(121, 242, 157);
+}
+.toolbarBtn {
+  position: absolute;
+  top: 10px;
+  right: 200px;
+  z-index: 1;
+}
+.bgColor {
+  background-color: var(--calcite-app-background-content);
+}
+:global {
+  body {
+    .ant-drawer.ant-drawer-open .ant-drawer-mask {
+      display: none;
+    }
+  }
+}
+.toolbarDrawer {
+  :global {
+    .ant-drawer-content {
+      // background-color: transparent !important;
+    }
+    .ant-drawer-header,
+    .ant-drawer-wrapper-body {
+      border: 1px solid rgba(32, 160, 255, 0.3);
+    }
+    .ant-drawer-title {
+      color: white;
+    }
+  }
+}
