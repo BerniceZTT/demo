@@ -66,10 +66,10 @@ export default function CesiumView(props: Props) {
     //   token:
     //     "KED1aF_I4UzXOHy3BnhwyBHU4l5oY6rO6walkmHoYqGp4XyIWUd5YZUC1ZrLAzvV40pR6gBXQayh0eFA8m6vPg..",
     // });
-    Viewer.terrainProvider = new Cesium.VRTheWorldTerrainProvider({
-        url: "http://www.vr-theworld.com/vr-theworld/tiles1.0.0/73/",
-        credit: "Terrain data courtesy VT MÄK",
-      });
+    // Viewer.terrainProvider = new Cesium.VRTheWorldTerrainProvider({
+    //     url: "http://www.vr-theworld.com/vr-theworld/tiles1.0.0/73/",
+    //     credit: "Terrain data courtesy VT MÄK",
+    //   });
     // new Cesium.CesiumTerrainProvider({
     //   url: 'http://data.mars3d.cn/terrain', // 地址记得换成自己的地形数据地址
     //   requestWaterMask: true, // 开启法向量

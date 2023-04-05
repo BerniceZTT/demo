@@ -84,10 +84,11 @@ export const add3dTile = (viewer: any, value: any) => {
         cartographic.latitude,
         0.0,
       );
+      console.log("center.alt", center)
       const offset = Cesium.Cartesian3.fromRadians(
         cartographic.longitude,
         cartographic.latitude,
-        center.alt,
+        center?.alt,
       );
       const translation = Cesium.Cartesian3.subtract(
         offset,
