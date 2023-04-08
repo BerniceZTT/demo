@@ -6,6 +6,7 @@ import LongLatInfo from '../LongLatInfo';
 import { useModel } from 'umi';
 import TooltipDiv from '../Tool/Tooltip/tooltipDiv';
 import CesiumNavigation from 'cesium-navigation-es6';
+import cesiumContextMenu from '../Menu';
 
 window.CESIUM_BASE_URL = '/Cesium/';
 
@@ -48,11 +49,15 @@ export default function CesiumView(props: Props) {
       imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
         url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
       }),
+      // selectionIndicator: true,
+      // infoBox: true
     });
     Viewer.scene.globe.depthTestAgainstTerrain = true;
     Viewer._cesiumWidget._creditContainer.style.display = 'none';
     Viewer.scene.postProcessStages.fxaa.enabled = true;
     Viewer.scene.fxaa = true;
+
+    new cesiumContextMenu(Viewer);
     window.viewer = Viewer;
     window[id] = Viewer;
     // window[`${id}`] = viewer;

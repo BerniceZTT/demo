@@ -1,4 +1,4 @@
-import { message, Modal } from 'antd';
+import { message, Modal, ModalFuncProps } from 'antd';
 
 // 封装消息弹框，编译后期自定义弹框内容/样式
 declare type ConfigContent = React.ReactNode | string;
@@ -19,7 +19,7 @@ interface ArgsProps {
   className?: string;
 }
 
-let msgModal;
+let msgModal: { destroy: () => void; update: (configUpdate: ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)) => void; } | null;
 const renderMsg = (type: NoticeType, content: ConfigContent) => {
   if (!msgModal) {
     msgModal = Modal.error({

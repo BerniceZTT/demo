@@ -1,13 +1,13 @@
 import Cesium from 'cesium';
 
 // 淹没效果
-export const drawPolygon = (viewer) => {
+export const drawPolygon = (viewer: { camera: { positionCartographic: { height: number; }; }; entities: { add: (arg0: { name: string; polygon: { hierarchy: any[]; perPositionHeight: boolean; extrudedHeight: number; material: any; }; }) => void; }; scene: { canvas: HTMLCanvasElement | undefined; camera: { pickEllipsoid: (arg0: any, arg1: any) => any; }; globe: { ellipsoid: any; }; }; }) => {
   var waterHeight = 100; //初始设定的水位高度
   var targetHeight =
     Number((viewer.camera.positionCartographic.height / 1000).toFixed(2)) * 100;
   console.log(targetHeight);
   var PolygonPrimitive = (function () {
-    function _(positions) {
+    function _(positions: any) {
       this.options = {
         name: '多边形',
         polygon: {

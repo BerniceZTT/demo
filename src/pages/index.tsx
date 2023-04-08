@@ -30,8 +30,7 @@ applyPolyfills().then(() => {
 const { TabPane } = Tabs;
 
 export default function IndexPage() {
-  const { collapsed, chanageCollapsed, changeMenuType } =
-    useModel('useCesiumMap');
+  const { collapsed, chanageCollapsed, changeMenuType } = useModel('useCesiumMap');
 
   const [actionType, setActionType] = useState<string>('');
   const [headerTitle, setHeaderTitle] = useState<string>('');
@@ -56,7 +55,6 @@ export default function IndexPage() {
     if (type) {
       if (type === 'roller') {
         setActionType(type);
-
         chanageCollapsed(true);
       } else {
         Panel = panel[type];
@@ -65,12 +63,6 @@ export default function IndexPage() {
         chanageCollapsed(false);
       }
     }
-  };
-  const initData = {
-    title: '底图',
-    text: '底图',
-    icon: 'basemap',
-    'data-type': 'baseMap',
   };
 
   useEffect(() => {
@@ -94,7 +86,6 @@ export default function IndexPage() {
           <CalciteActionBar
             slot="action-bar"
             expanded
-            // theme="dark"
             onClick={(e) => {
               clickHandler(e);
             }}
