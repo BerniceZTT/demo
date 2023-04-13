@@ -557,6 +557,7 @@ class Draw {
 
   clear() {
     const layer = this.viewer.dataSources.getByName("drawLayer");
+    console.log("layer", layer)
     for(let i = 0; i < layer.length; i++){
       if(layer[i]?.entities){
         layer[i].entities.removeAll();

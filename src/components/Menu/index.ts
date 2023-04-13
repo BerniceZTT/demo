@@ -4,6 +4,7 @@ import { Viewer } from 'cesium';
 import CatCesium from './cesiumsdk/cat';
 import Menu from './contextmenu/menu';
 import { message } from 'antd';
+import { GlobeRotate } from '../GlobeRotate';
 class cesiumContextMenu {
 
 	private catCesium: CatCesium;
@@ -267,12 +268,13 @@ class cesiumContextMenu {
 				]
 			},
       {
-        "text": "放置",
+        "text": "开启自转",
         "icon": '<img src= "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAWZJREFUOE+F0z9IVmEUx/GPODhLkxI0SNCeBEqIFf2HQMxEIRdBHWpocBACi4pqKCjIoUFzEkMnERchFQmCmpwE07XWpLk4cV64PL2+PnC53Oec8z2/8+c2qX9GcA1n0YZv+UzjdzWkqYg/gZe4g2fYxy+cwnmcw3Uc1OJKwBracQU/64i7j7ep6kfYq4CQ/SSzhW0AITlKmMVkAl+jEz0lYAtvsIzI9DTL+I5+NGMQJ7GHPqxVFURdl9M4l5mjkTU1H3EGuwhoJJirAv5USjoO8AmbeFQFfMZ7fMCDMGYJIfd2KrqQimIyF/G1CniHVgyn0wTuZeASonkhvxvzOF02sSuagnEsHrFgcR0+63hVAuJ7FI9xKbOVnOc5wmj2v1MuUty9yK27WqztGB7iJnYaAcK2kA5D+b6BVdzCSqN/oWZrwQa+5FRiZFOYKWuqV0LNpwPbOMztDMB/pxEgnHuzsXePmspfSh1HEUyY2wUAAAAASUVORK5CYII="/>',
         "events": {
          "click": () => {
-          message.info("放置")
-          this.catCesium.placeModel(12);
+          let globeRotate = new GlobeRotate(viewer);
+          globeRotate.start();
+          // this.catCesium.placeModel(12);
           // this.catCesium.getLocalPos();
          }
         }

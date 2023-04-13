@@ -2,11 +2,11 @@ import styles from './index.less';
 import * as Cesium from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import { useEffect, useState } from 'react';
-import LongLatInfo from '../LongLatInfo';
 import { useModel } from 'umi';
 import TooltipDiv from '../Tool/Tooltip/tooltipDiv';
 import CesiumNavigation from 'cesium-navigation-es6';
 import cesiumContextMenu from '../Menu';
+import { GlobeRotate } from '../GlobeRotate';
 
 window.CESIUM_BASE_URL = '/Cesium/';
 
@@ -17,19 +17,10 @@ interface Props {
 
 export default function CesiumView(props: Props) {
   const { id = 'cesiumContainer', style } = props;
-
   const { menuType } = useModel('useCesiumMap');
   const [viewer, setViewer] = useState(null as any);
 
-  useModel;
   useEffect(() => {
-    // var script = document.createElement('script');
-    // script.type = 'text/javascript';
-    // script.async = true;
-    // script.src = '../../public/lib/viewerCesiumNavigationMixin.min.js';
-    // document.head.appendChild(script);
-
-    let config = {};
     Cesium.Ion.defaultAccessToken =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGUxODM3ZC0wYWI5LTQ3YWYtOWViOS1hNzlhMWUzNGM2MTkiLCJpZCI6ODE3NjQsImlhdCI6MTY0NDMwNjEyNH0.a-hxx4087RWJ3UQheRGXLxWEnPP3WnnAxGYqUBBMsTI';
 
@@ -39,18 +30,22 @@ export default function CesiumView(props: Props) {
       homeButton: true, // 视角返回初始位置
       sceneModePicker: true, // 选择视角的模式（球体、平铺、斜视平铺）
       baseLayerPicker: false, // 图层选择器（地形影像服务）
-      navigationHelpButton: true, // 导航帮助(手势，鼠标)
-      // animation: false, // 左下角仪表盘（动画器件）
-      // timeline: false, // 底部时间线
-      animation: true,
+      navigationHelpButton: false, // 导航帮助(手势，鼠标)
+      animation: true, //左下角仪表盘（动画器件）
       timeline: true, // 底部时间线
       fullscreenButton: true, // 全屏
       vrButton: true, // VR
-      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
-        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-      }),
-      // selectionIndicator: true,
-      // infoBox: true
+      // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+      //   url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+      // }),
+      // imageryProvider: new Cesium.UrlTemplateImageryProvider({
+      //   url:'/data/hybrid/{z}/{x}/{y}.jpg',
+      //   minimumLevel:2,
+      //   maximumLevel:14
+      // }),
+      selectionIndicator: false,
+      infoBox: false,
+      shouldAnimate: true,
     });
     Viewer.scene.globe.depthTestAgainstTerrain = true;
     Viewer._cesiumWidget._creditContainer.style.display = 'none';
@@ -61,7 +56,7 @@ export default function CesiumView(props: Props) {
     window.viewer = Viewer;
     window[id] = Viewer;
     // window[`${id}`] = viewer;
-
+    Viewer.targetFrameRate = 10
     setViewer(Viewer);
 
     // 加载地形
@@ -75,24 +70,30 @@ export default function CesiumView(props: Props) {
     //     url: "http://www.vr-theworld.com/vr-theworld/tiles1.0.0/73/",
     //     credit: "Terrain data courtesy VT MÄK",
     //   });
-    // new Cesium.CesiumTerrainProvider({
+    // Viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
     //   url: 'http://data.mars3d.cn/terrain', // 地址记得换成自己的地形数据地址
     //   requestWaterMask: true, // 开启法向量
     //   requestVertexNormals: true, // 开启水面特效
     // });
-    // 将三维球定位到中国
-    Viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(101.8875, 28.440864, 3461042),
-      orientation: {
-        heading: Cesium.Math.toRadians(360),
-        pitch: Cesium.Math.toRadians(-90),
-        roll: Cesium.Math.toRadians(0),
-      },
-      duration: 5,
-      complete: function callback() {
-        // 定位完成之后的回调函数
-      },
+
+    Viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
+      url: 'http://data.mars3d.cn/terrain', // 地址记得换成自己的地形数据地址
+      requestWaterMask: true, // 开启法向量
+      requestVertexNormals: true, // 开启水面特效
     });
+    // 将三维球定位到中国
+    // Viewer.camera.flyTo({
+    //   destination: Cesium.Cartesian3.fromDegrees(101.8875, 28.440864, 3461042),
+    //   orientation: {
+    //     heading: Cesium.Math.toRadians(360),
+    //     pitch: Cesium.Math.toRadians(-90),
+    //     roll: Cesium.Math.toRadians(0),
+    //   },
+    //   duration: 5,
+    //   complete: function callback() {
+    //     // 定位完成之后的回调函数
+    //   },
+    // });
 
     // 罗盘
     let options: any = {};
@@ -112,15 +113,18 @@ export default function CesiumView(props: Props) {
     Viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(
       Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK,
     );
-    Viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(110.2, 34.55, 3000000),
-    });
+    // Viewer.camera.setView({
+    //   destination: Cesium.Cartesian3.fromDegrees(110.2, 34.55, 3000000),
+    // });
     var scene = Viewer.scene;
     var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
     var ellipsoid = scene.globe.ellipsoid;
     var cartesian = null;
 
     // TooltipDiv.initTool(Viewer.cesiumWidget.container);
+
+    // let globeRotate = new GlobeRotate(Viewer);
+    // globeRotate.start();
 
     //一 鼠标MOUSE_MOVE
     handler.setInputAction(function (movement) {
@@ -138,6 +142,8 @@ export default function CesiumView(props: Props) {
     //二 LEFT_CLICK
     handler.setInputAction(function (movement) {
       cartesian = Viewer.camera.pickEllipsoid(movement.position, ellipsoid);
+      let globeRotate = new GlobeRotate(Viewer);
+      globeRotate.stop();
       if (cartesian) {
         TooltipDiv.showAt(movement.position, 'LEFT_CLICK');
       } else {
@@ -174,6 +180,13 @@ export default function CesiumView(props: Props) {
         TooltipDiv.setVisible(false);
       }
     }, Cesium.ScreenSpaceEventType.LEFT_UP);
+
+
+    // Viewer.dataSources.add(
+    //   Cesium.CzmlDataSource.load("/SampleData/simple.czml")
+    // );
+
+    Viewer.camera.flyHome(0);
   }, []);
 
   //bernice
