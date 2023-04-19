@@ -2,7 +2,6 @@ import styles from './index.less';
 import * as Cesium from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
 import TooltipDiv from '../Tool/Tooltip/tooltipDiv';
 import CesiumNavigation from 'cesium-navigation-es6';
 import cesiumContextMenu from '../Menu';
@@ -17,14 +16,11 @@ interface Props {
 
 export default function CesiumView(props: Props) {
   const { id = 'cesiumContainer', style } = props;
-  const { menuType } = useModel('useCesiumMap');
   const [viewer, setViewer] = useState(null as any);
 
   useEffect(() => {
     Cesium.Ion.defaultAccessToken =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGUxODM3ZC0wYWI5LTQ3YWYtOWViOS1hNzlhMWUzNGM2MTkiLCJpZCI6ODE3NjQsImlhdCI6MTY0NDMwNjEyNH0.a-hxx4087RWJ3UQheRGXLxWEnPP3WnnAxGYqUBBMsTI';
-
-    //bernice
     const Viewer: any = new Cesium.Viewer(id, {
       geocoder: false, // 位置查找工具
       homeButton: true, // 视角返回初始位置
@@ -38,50 +34,29 @@ export default function CesiumView(props: Props) {
       // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
       //   url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
       // }),
-      // imageryProvider: new Cesium.UrlTemplateImageryProvider({
-      //   url:'/data/hybrid/{z}/{x}/{y}.jpg',
-      //   minimumLevel:2,
-      //   maximumLevel:14
-      // }),
-      selectionIndicator: false,
       infoBox: false,
-      shouldAnimate: true,
+      selectionIndicator: false,
     });
-    Viewer.scene.globe.depthTestAgainstTerrain = true;
+    Viewer.scene.globe.depthTestAgainstTerrain = false;
+
     Viewer._cesiumWidget._creditContainer.style.display = 'none';
     Viewer.scene.postProcessStages.fxaa.enabled = true;
     Viewer.scene.fxaa = true;
-
-    new cesiumContextMenu(Viewer);
+    Viewer.scene.globe.enableLighting = true;
+    Viewer.shadows = true;
     window.viewer = Viewer;
     window[id] = Viewer;
     // window[`${id}`] = viewer;
-    Viewer.targetFrameRate = 10
+
     setViewer(Viewer);
 
     // 加载地形
-    // Viewer.terrainProvider = new Cesium.ArcGISTiledElevationTerrainProvider({
-    //   url:
-    //     "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer",
-    //   token:
-    //     "KED1aF_I4UzXOHy3BnhwyBHU4l5oY6rO6walkmHoYqGp4XyIWUd5YZUC1ZrLAzvV40pR6gBXQayh0eFA8m6vPg..",
-    // });
-    // Viewer.terrainProvider = new Cesium.VRTheWorldTerrainProvider({
-    //     url: "http://www.vr-theworld.com/vr-theworld/tiles1.0.0/73/",
-    //     credit: "Terrain data courtesy VT MÄK",
-    //   });
-    // Viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-    //   url: 'http://data.mars3d.cn/terrain', // 地址记得换成自己的地形数据地址
-    //   requestWaterMask: true, // 开启法向量
-    //   requestVertexNormals: true, // 开启水面特效
-    // });
-
     Viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
       url: 'http://data.mars3d.cn/terrain', // 地址记得换成自己的地形数据地址
       requestWaterMask: true, // 开启法向量
       requestVertexNormals: true, // 开启水面特效
     });
-    // 将三维球定位到中国
+    // // 将三维球定位到中国
     // Viewer.camera.flyTo({
     //   destination: Cesium.Cartesian3.fromDegrees(101.8875, 28.440864, 3461042),
     //   orientation: {
@@ -113,19 +88,17 @@ export default function CesiumView(props: Props) {
     Viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(
       Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK,
     );
-    // Viewer.camera.setView({
-    //   destination: Cesium.Cartesian3.fromDegrees(110.2, 34.55, 3000000),
-    // });
+    Viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(110.2, 34.55, 3000000),
+    });
     var scene = Viewer.scene;
     var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
     var ellipsoid = scene.globe.ellipsoid;
     var cartesian = null;
 
-    // TooltipDiv.initTool(Viewer.cesiumWidget.container);
-
-    // let globeRotate = new GlobeRotate(Viewer);
-    // globeRotate.start();
-
+    new cesiumContextMenu(Viewer);
+    let globeRotate = new GlobeRotate(Viewer);
+    globeRotate.start();
     //一 鼠标MOUSE_MOVE
     handler.setInputAction(function (movement) {
       cartesian = Viewer.camera.pickEllipsoid(movement.endPosition, ellipsoid);
@@ -142,8 +115,6 @@ export default function CesiumView(props: Props) {
     //二 LEFT_CLICK
     handler.setInputAction(function (movement) {
       cartesian = Viewer.camera.pickEllipsoid(movement.position, ellipsoid);
-      let globeRotate = new GlobeRotate(Viewer);
-      globeRotate.stop();
       if (cartesian) {
         TooltipDiv.showAt(movement.position, 'LEFT_CLICK');
       } else {
@@ -151,7 +122,7 @@ export default function CesiumView(props: Props) {
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
-    //三 LEFT_DOUBLE_CLICK
+    //二 LEFT_DOUBLE_CLICK
     handler.setInputAction(function (movement) {
       cartesian = Viewer.camera.pickEllipsoid(movement.position, ellipsoid);
       if (cartesian) {
@@ -159,6 +130,22 @@ export default function CesiumView(props: Props) {
       } else {
         TooltipDiv.setVisible(false);
       }
+      // window.viewer.camera.flyTo({
+      //   destination: Cesium.Cartesian3.fromDegrees(
+      //     120.27244,
+      //     24.64095,
+      //     39087,
+      //   ),
+      //   orientation: {
+      //     heading: Cesium.Math.toRadians(96.08),
+      //     pitch: Cesium.Math.toRadians(-23.46),
+      //     roll: Cesium.Math.toRadians(0.11),
+      //   },
+      //   duration: 5,
+      //   complete: function callback() {
+      //     // 定位完成之后的回调函数
+      //   },
+      // });
     }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     //四 LEFT_DOWN
@@ -181,19 +168,13 @@ export default function CesiumView(props: Props) {
       }
     }, Cesium.ScreenSpaceEventType.LEFT_UP);
 
-
-    // Viewer.dataSources.add(
-    //   Cesium.CzmlDataSource.load("/SampleData/simple.czml")
-    // );
-
     Viewer.camera.flyHome(0);
+
   }, []);
 
-  //bernice
   return (
     <div className={styles.container} style={style}>
       <div className={styles.slider} id="slider"></div>
-
       <div id={id} className={styles.cesiumContainer}></div>
       {/* {viewer && <LongLatInfo viewer={viewer} />} */}
     </div>

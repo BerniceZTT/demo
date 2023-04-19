@@ -11,6 +11,7 @@ class CatCesium implements I_catCesium {
 
 	private viewer: Viewer;
 	private rightPosition: Array<number> = [];
+  private pickedObj: Object = {};
 	private rotateHeading: number = 0;
 	private rotatePitch: number = 0;
 	private rotateRange: number = 0;
@@ -34,7 +35,7 @@ class CatCesium implements I_catCesium {
 	public init(menu: Menu): void {
 		const handler: ScreenSpaceEventHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
 		handler.setInputAction((movement: any) => {
-
+      console.log("movement", movement)
 			let e: T_e = { clientX: movement.position.x, clientY: movement.position.y };
 			menu.display(e);
 
@@ -43,17 +44,63 @@ class CatCesium implements I_catCesium {
 				const cartesian = this.viewer.scene.pickPosition(movement.position);
 				if (Cesium.defined(cartesian)) {
 					this.rightPosition = this.transformCnToCc(cartesian);
+          this.pickedObj = pickedObj;
+          console.log("1111", pickedObj)
 				}
 			} else {
 				let earthPosition: Cartesian3 = this.viewer.camera.pickEllipsoid(movement.position, this.viewer.scene.globe.ellipsoid) as Cartesian3;
 				if (Cesium.defined(earthPosition)) {
 					this.rightPosition = this.transformCnToCc(earthPosition);
+          console.log("2222", earthPosition)
 				}
 			}
 		}, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+
+    document.addEventListener("keydown", function (e) {
+      switch (e.code) {
+        case "ArrowDown"://下
+          if (e.shiftKey) {
+            // speed down
+            console.log("40-1", e)
+          } else {
+            // pitch down
+            console.log("40-2", e)
+          }
+          break;
+        case "ArrowUp"://上
+          if (e.shiftKey) {
+            // speed up
+            console.log("38-1", e)
+          } else {
+            // pitch up
+            console.log("38-2", e)
+          }
+          break;
+        case "ArrowRight"://又
+          if (e.shiftKey) {
+            // roll right
+            console.log("39-1", e)
+          } else {
+            // turn right
+            console.log("39-2", e)
+          }
+          break;
+        case "ArrowLeft"://左
+          if (e.shiftKey) {
+            // roll left until
+            console.log("37-1", e)
+          } else {
+            // turn left
+            console.log("37-2", e)
+          }
+          break;
+        default:
+      }
+    });
 	};
 
 	public getLocalPos(): void {
+    console.log("")
 		const tempInfo: string = `经度：${this.rightPosition[0]};\n纬度：${this.rightPosition[1]};\n高度：${this.rightPosition[2].toFixed(3)}米`;
 		alert(tempInfo);
 	};
@@ -238,22 +285,30 @@ class CatCesium implements I_catCesium {
 	};
 
   public placeModel(id: string): void {
-    const long = this.rightPosition[0];
-    const lat = this.rightPosition[1];
-    const height = this.rightPosition[2].toFixed(3);
-    var position = Cesium.Cartesian3.fromDegrees(long, lat, Number(height),)
     const viewer = window.viewer as Cesium.Viewer;
-    viewer.entities.add(
-      new Cesium.Entity({
-      id: 'model_1',
-      position: position,
-      model: {
-        uri: "/sampleData/model/办公楼.glb",
-        scale: 10,
-      },
-      }),
-    );
-    viewer.flyTo(window.viewer.entities);
+    // 获取 pick 拾取对象
+    var pick = viewer.scene.pick(event.position);
+    // 判断是否获取到了 pick
+    if (Cesium.defined(pick)) {
+      // 修改拾取到的entity的样式
+      pick.id.billboard.image = "xxx.png"
+    }
+    // const long = this.rightPosition[0];
+    // const lat = this.rightPosition[1];
+    // const height = this.rightPosition[2].toFixed(3);
+    // var position = Cesium.Cartesian3.fromDegrees(long, lat, Number(height),)
+    // const viewer = window.viewer as Cesium.Viewer;
+    // viewer.entities.add(
+    //   new Cesium.Entity({
+    //   id: 'model_1',
+    //   position: position,
+    //   model: {
+    //     uri: "/sampleData/model/办公楼.glb",
+    //     scale: 10,
+    //   },
+    //   }),
+    // );
+    // viewer.flyTo(window.viewer.entities);
    };
 
    public removeModel(id: string): void {

@@ -8,7 +8,7 @@ export default function useCesiumMapModel() {
   const [locationInfo, setLoaction] = useState<IMapLoaction>({
     long: '116.387775',
     lat: '31.560200',
-    height: '34',
+    height: '10000',
   });
   const [menuType, setMenuType] = useState("");
 

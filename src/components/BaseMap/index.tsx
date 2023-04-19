@@ -1,15 +1,10 @@
-import { Avatar, Button, Dropdown, List, Menu, Radio, Space } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Avatar, Space } from 'antd';
+import React, {  } from 'react';
 import { useModel } from 'umi';
-import { UserOutlined } from '@ant-design/icons';
 import styles from './index.less';
-import * as Cesium from 'cesium';
-import Scale from '../Scale';
 import CustomModal from '../CustomModal';
-import { IBaseMapType } from '@/pages/inteface';
 import { config } from '../../config';
 import { loadArcgisMap } from '@/utils/layerUtils';
-import { drawPolygon } from '@/utils/analyize';
 
 type IBaseMap = {};
 

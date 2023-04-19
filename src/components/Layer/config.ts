@@ -49,7 +49,7 @@ export default {
         {
           title: 'gltf',
           key: 'gltf',
-          url: "/sampleData/model/CesiumAir/Cesium_Air.glb",
+          url: "/SampleData/models/CesiumAir/Cesium_Air.glb",
           type: "gltf"
         },
         {

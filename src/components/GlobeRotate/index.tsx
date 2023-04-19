@@ -25,7 +25,7 @@ export class GlobeRotate {
   // 绑定事件
   _bindEvent() {
     // 转动的速度设置
-      this._viewer.clock.multiplier = 15 * 1000;
+      this._viewer.clock.multiplier = 15 * 100;
       // 初始化为单位矩阵
       this._viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
       this._viewer.scene.postUpdate.addEventListener(this._icrf, this);

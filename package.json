@@ -24,6 +24,9 @@
     "@ant-design/pro-layout": "^6.5.0",
     "@esri/calcite-components": "^1.0.0-beta.83",
     "@esri/calcite-components-react": "^0.32.0",
+    "@turf/boolean-contains": "^6.5.0",
+    "@turf/boolean-point-in-polygon": "^6.5.0",
+    "@turf/turf": "^6.5.0",
     "@types/cesium": "^1.67.13",
     "@umijs/preset-react": "1.x",
     "antd": "^4.15.4",
@@ -35,7 +38,8 @@
     "i": "^0.3.6",
     "npm": "^7.16.0",
     "umi": "^3.4.15",
-    "use-deep-compare-effect": "^1.6.1"
+    "use-deep-compare-effect": "^1.6.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.5",
