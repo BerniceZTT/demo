@@ -39,7 +39,9 @@
     "npm": "^7.16.0",
     "umi": "^3.4.15",
     "use-deep-compare-effect": "^1.6.1",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "@arco-design/web-react": "^2.47.0",
+    "axios": "^0.25.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.5",

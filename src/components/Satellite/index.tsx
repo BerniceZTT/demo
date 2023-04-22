@@ -180,7 +180,6 @@ const Index: React.FC<Props> = () => {
       });
     }
   };
-
   renderCylinder();
 
   const computerContains = (point: {
@@ -290,6 +289,25 @@ const Index: React.FC<Props> = () => {
               if (isContains) {
                 boardLayer.show = true;
                 setCheckBoard(true);
+
+                window.viewer.camera.flyTo({
+                  destination: Cesium.Cartesian3.fromDegrees(
+                    120.27244,
+                    24.64095,
+                    39087,
+                  ),
+                  orientation: {
+                    heading: Cesium.Math.toRadians(96.08),
+                    pitch: Cesium.Math.toRadians(-23.46),
+                    roll: Cesium.Math.toRadians(0.11),
+                  },
+                  duration: 5,
+                  complete: function callback() {
+                    // 定位完成之后的回调函数
+                  },
+                });
+                wxLayer.show = false;
+                setcheckWeiXingHJ(false);
               }
             }
           }

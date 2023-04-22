@@ -42,8 +42,8 @@ export default function CesiumView(props: Props) {
     Viewer._cesiumWidget._creditContainer.style.display = 'none';
     Viewer.scene.postProcessStages.fxaa.enabled = true;
     Viewer.scene.fxaa = true;
-    Viewer.scene.globe.enableLighting = true;
-    Viewer.shadows = true;
+    // Viewer.scene.globe.enableLighting = true;
+    // Viewer.shadows = true;
     window.viewer = Viewer;
     window[id] = Viewer;
     // window[`${id}`] = viewer;
@@ -97,8 +97,8 @@ export default function CesiumView(props: Props) {
     var cartesian = null;
 
     new cesiumContextMenu(Viewer);
-    let globeRotate = new GlobeRotate(Viewer);
-    globeRotate.start();
+    // let globeRotate = new GlobeRotate(Viewer);
+    // globeRotate.start();
     //一 鼠标MOUSE_MOVE
     handler.setInputAction(function (movement) {
       cartesian = Viewer.camera.pickEllipsoid(movement.endPosition, ellipsoid);
@@ -130,22 +130,6 @@ export default function CesiumView(props: Props) {
       } else {
         TooltipDiv.setVisible(false);
       }
-      // window.viewer.camera.flyTo({
-      //   destination: Cesium.Cartesian3.fromDegrees(
-      //     120.27244,
-      //     24.64095,
-      //     39087,
-      //   ),
-      //   orientation: {
-      //     heading: Cesium.Math.toRadians(96.08),
-      //     pitch: Cesium.Math.toRadians(-23.46),
-      //     roll: Cesium.Math.toRadians(0.11),
-      //   },
-      //   duration: 5,
-      //   complete: function callback() {
-      //     // 定位完成之后的回调函数
-      //   },
-      // });
     }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     //四 LEFT_DOWN
