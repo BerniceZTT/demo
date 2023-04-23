@@ -4,8 +4,8 @@ ARG APP_NAME
 ENV APP_NAME=${APP_NAME}
 
 COPY ${APP_NAME}.tar .
-RUN tar -xf ${APP_NAME}.tar && cp APP-META/start.sh start.sh && chmod u+x start.sh
-
+RUN tar -xf ${APP_NAME}.tar && cp APP-META/start.sh start.sh && chmod u+x start.sh && \
+    cp -r frontend/dist/* /usr/share/nginx/html/
 COPY APP-META/nginx-config/nginx-proxy.conf /etc/nginx/conf.d/default.conf
 
 ENTRYPOINT [ "./start.sh" ]
