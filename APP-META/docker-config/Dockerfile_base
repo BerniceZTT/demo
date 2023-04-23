@@ -1,0 +1,22 @@
+FROM nginx:stable-alpine
+
+# 创建工作目录
+WORKDIR /root
+# 修改软件包源地址(此处使用 清华大学的源地址)
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+RUN apk update upgrade
+
+RUN apk add --no-cache ca-certificates tzdata tree curl tini vim
+
+# tzdata 是可以配置时区,这里默认使用上海时区
+RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone
+
+# 支持使用中文
+ENV LANG=zh_CN.UTF-8
+ENV LANGUAGE=zh_CN.UTF-8
+
+# 安装JDK11
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+RUN apk add --no-cache openjdk11
+
+

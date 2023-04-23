@@ -31,5 +31,7 @@ target/
 *.iws
 *.iml
 *.ipr
-
+*.tar
+*.tar.gz
+*.tgz
 
