@@ -35,6 +35,11 @@ export default function CesiumView(props: Props) {
       //   url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
       // }),
       infoBox: false,
+      imageryProvider: new Cesium.UrlTemplateImageryProvider({
+        url:'/data/maps/{z}/{x}/{y}.jpg',
+        minimumLevel:2,
+        maximumLevel:14
+      }),
       selectionIndicator: false,
     });
     Viewer.scene.globe.depthTestAgainstTerrain = false;

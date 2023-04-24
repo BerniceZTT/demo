@@ -1,25 +1,16 @@
 import { ReactNode, useEffect, useState } from 'react';
 import CesiumView from '../components/CesiumView';
+import * as Cesium from 'cesium';
 import { useModel } from 'umi';
 import '../global.less';
 import styles from './index.less';
-import {
-  applyPolyfills,
-  defineCustomElements,
-} from '@esri/calcite-components/dist/loader';
+import { applyPolyfills, defineCustomElements,} from '@esri/calcite-components/dist/loader';
 import '@esri/calcite-components/dist/calcite/calcite.css';
 import Measure from '@/components/Measure';
 import BaseMap from '@/components/BaseMap';
 import MapLocation from '@/components/Location';
 import Layer from '@/components/Layer';
-import {
-  CalciteAction,
-  CalciteActionBar,
-  CalciteActionGroup,
-  CalciteFlow,
-  CalciteShell,
-  CalciteShellPanel,
-} from '@esri/calcite-components-react';
+import {CalciteAction, CalciteActionBar, CalciteActionGroup, CalciteFlow, CalciteShell, CalciteShellPanel,} from '@esri/calcite-components-react';
 import BookMark from './BookMark';
 import Navigation from './Navigation';
 import ExportScene from './ExportScene';
@@ -28,10 +19,12 @@ import SplitScreen from './SplitScreen';
 import Draw from './Draw';
 import _ from 'lodash';
 import Satellite from '@/components/Satellite';
+import Test2 from '@/components/Satellite/test';
 
 applyPolyfills().then(() => {
   defineCustomElements(window);
 });
+
 
 export default function IndexPage() {
   const { collapsed, chanageCollapsed, changeMenuType } = useModel('useCesiumMap');
@@ -52,6 +45,7 @@ export default function IndexPage() {
     splitScreen: <SplitScreen />,
     draw: <Draw />,
     demo: <Satellite />,
+    test2: <Test2 />,
   };
   const clickHandler = (e: any) => {
     const type: string = e.target.getAttribute('data-type');
@@ -101,6 +95,7 @@ export default function IndexPage() {
           >
             <CalciteActionGroup>
               <CalciteAction text="demo" icon="layers" data-type="demo" />
+              <CalciteAction text="test2" icon="layers" data-type="test2" />
             </CalciteActionGroup>
             {/* <CalciteActionGroup>
               <CalciteAction title="底图" text="底图" icon="basemap" data-type="baseMap"/>
