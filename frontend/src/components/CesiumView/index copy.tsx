@@ -77,8 +77,8 @@ export default function CesiumView(props: Props) {
     // });
 
     Viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-      url: 'http://data.mars3d.cn/terrain', // 地址记得换成自己的地形数据地址
-      // url: '/data/terrain', // 地址记得换成自己的地形数据地址
+      // url: 'http://data.mars3d.cn/terrain', // 地址记得换成自己的地形数据地址
+      url: '/data/terrain', // 地址记得换成自己的地形数据地址
       requestWaterMask: true, // 开启法向量
       requestVertexNormals: true, // 开启水面特效
     });
