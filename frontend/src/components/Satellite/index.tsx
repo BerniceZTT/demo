@@ -1,12 +1,6 @@
 import CustomModal from '@/components/CustomModal';
 import _ from 'lodash';
-import {
-  Button,
-  Checkbox,
-  Form,
-  Space,
-  Tabs,
-} from 'antd';
+import {Button, Checkbox, Divider, Form, Slider, Space, Tabs,} from 'antd';
 import * as Cesium from 'cesium';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useModel } from 'umi';
@@ -30,6 +24,7 @@ warnLayer.show = false;
 let time: any;
 interface Props {}
 
+let selectedEntity: Cesium.Entity;
 
 const polygonOptions = [
   { lon: 112.034586, lat: 25.104295, alt: 200 },
@@ -39,7 +34,6 @@ const polygonOptions = [
   { lon: 112.034586, lat: 25.104295, alt: 200 },
 ];
 
-
 const Index: React.FC<Props> = () => {
   const [form] = Form.useForm();
   const { chanageCollapsed,} = useModel('useCesiumMap');
@@ -48,16 +42,19 @@ const Index: React.FC<Props> = () => {
   const [checkWeiXingHJ, setcheckWeiXingHJ] = useState(false);
   const [checkBoard, setCheckBoard] = useState(false);
   const [checkWarn, setCheckWarn] = useState(false);
+  const [scaleValue, setScaleValue] = useState(30);
+  const [key, setKey] = useState(0);
 
   const graphics = useMemo(() => new DkMap.Graphic(window.viewer), [window.viewer],);
 
   useEffect(() => {
-    // flyTo(118, 271, 2685000);
     return () => {
       (window.viewer as Cesium.Viewer).dataSources.removeAll();
       clearInterval(time);
     };
   }, []);
+
+
 
   // 卫星
   function satellite(viewer: Cesium.Viewer) {
@@ -241,6 +238,7 @@ const Index: React.FC<Props> = () => {
           stop: stop,
         }),
       ]),
+      name: "卫星",
       position: entity1p, //计算实体位置属性
       //基于位置移动自动计算方向.
       orientation: new Cesium.VelocityOrientationProperty(entity1p),
@@ -469,6 +467,7 @@ const Index: React.FC<Props> = () => {
           uri: el.url,
           scale: el.scale,
         },
+        name: el.name,
         startTime: start,
         stopTime: stop,
         label: {
@@ -509,10 +508,22 @@ const Index: React.FC<Props> = () => {
     setCheckWarn(value);
   };
 
+  (window.viewer as Cesium.Viewer).screenSpaceEventHandler.setInputAction((e) => {
+    let picked = (window.viewer as Cesium.Viewer).scene.pick(e.position);
+    if (picked) {
+      let pickedEntity = Cesium.defaultValue(picked.id, picked.primitive.id);
+      if (pickedEntity instanceof Cesium.Entity && pickedEntity.model) {
+        selectedEntity = pickedEntity;
+        setKey(new Date().getTime());
+      }
+    }
+  }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+
   return (
-    <div>
+    <div key={key}>
       <CustomModal title={'场景模拟'} onCancel={closeHandler}>
         <div>
+          <Divider orientation={'left'}>场景控制</Divider>
           <Space>
             <Button type="primary" onClick={startHandler}>
               开始
@@ -523,8 +534,8 @@ const Index: React.FC<Props> = () => {
             </Button>
           </Space>
         </div>
-        <Tabs>
-          <Tabs.TabPane tab="图层控制" key="item-1">
+
+        <Divider orientation={'left'} style={{marginTop: 20}}>图层控制</Divider>
             <div>
               <Space direction="vertical">
                 <Checkbox
@@ -543,8 +554,23 @@ const Index: React.FC<Props> = () => {
                 </Checkbox>
               </Space>
             </div>
-          </Tabs.TabPane>
-        </Tabs>
+            {selectedEntity != null && <>
+              <Divider orientation={'left'} style={{marginTop: 20}}>模型控制</Divider>
+              <>已选模型：{selectedEntity?.name}</>
+              <Space>
+                <>大小：</>
+                <Slider
+                  value={scaleValue}
+                  onChange={(v)=>{
+                    setScaleValue(v);
+                    if(selectedEntity?.model?.scale){
+                      (selectedEntity.model.scale as any) = v * 30;
+                    }
+                    }}
+                    style={{ width: 200 }}
+                  />
+              </Space>
+            </>}
       </CustomModal>
     </div>
   );
