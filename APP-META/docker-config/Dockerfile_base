@@ -19,4 +19,6 @@ ENV LANGUAGE=zh_CN.UTF-8
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 RUN apk add --no-cache openjdk11
 
-
+# 加入地形数据
+COPY map_terrain/data.tgz .
+RUN tar zxf data.tgz && mv data /usr/share/nginx/html/ && rm -rf data.tgz

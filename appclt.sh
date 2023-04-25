@@ -32,9 +32,9 @@ clean() {
     echo "------step2: clean backend dist----"
     cd $BACKEND_DIR
     ./mvnw clean
-    echo "------step3:$APP_NAME.tgz------"
+    echo "------step3:$APP_NAME.tar------"
     cd $CURRENT_DIR
-    rm -rf $APP_NAME.tgz
+    rm -rf $APP_NAME.tar
     echo "======clean project end============"
 }
 
@@ -64,7 +64,7 @@ build() {
     fi
     echo "-------step3:gen tar file----------"
     cd $CURRENT_DIR
-    tar -cf ${APP_NAME}.tgz frontend/dist backend/target/${APP_NAME}-backend.jar APP-META/start.sh
+    tar -cf ${APP_NAME}.tar frontend/dist backend/target/${APP_NAME}-backend.jar APP-META/start.sh
     echo "-------step4: build docker image----"
     cd $CURRENT_DIR
     docker build -f $DOCKER_CONFIG_DIR/Dockerfile --build-arg APP_NAME=${APP_NAME} -t $APP_NAME .
