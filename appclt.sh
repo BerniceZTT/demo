@@ -10,7 +10,7 @@ BACKEND_DIR=$CURRENT_DIR/backend
 
 usege() {
     echo "$CURRENT_DIR"
-    echo "Usage: $PROG_NAME {install|clean|build|restart|stop}"
+    echo "Usage: $PROG_NAME {install|buildBase|clean|build|restart|stop}"
 }
 
 install() {
